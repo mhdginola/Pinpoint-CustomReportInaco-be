@@ -32,6 +32,7 @@
     "@point-hub/express-error-handler": "^0.0.6",
     "@point-hub/express-utils": "^0.1.1",
     "@point-hub/papi": "^0.0.4",
+    "argon2": "^0.30.3",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
     "date-fns": "^2.29.3",
