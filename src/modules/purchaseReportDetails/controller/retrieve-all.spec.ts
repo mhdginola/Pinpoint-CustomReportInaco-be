@@ -93,16 +93,16 @@ describe("retrieve all Purchase Report Details", () => {
     const purchaseInvoiceFactory = new PurchaseInvoiceFactory();
     const data = [
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[0],
-        purchaseOrderID: purchaseOrderResult.insertedIds[0],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[0],
+        purchaseOrder_id: purchaseOrderResult.insertedIds[0],
       },
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[1],
-        purchaseOrderID: purchaseOrderResult.insertedIds[1],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[1],
+        purchaseOrder_id: purchaseOrderResult.insertedIds[1],
       },
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[2],
-        purchaseOrderID: purchaseOrderResult.insertedIds[2],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[2],
+        purchaseOrder_id: purchaseOrderResult.insertedIds[2],
       },
     ];
     purchaseInvoiceFactory.sequence(data);
@@ -118,10 +118,10 @@ describe("retrieve all Purchase Report Details", () => {
     const purchaseReceivesRecord = await retrieveAll("purchaseReceives");
     const purchaseOrdersRecord = await retrieveAll("purchaseOrders");
     expect(purchaseInvoicesRecord[0]._id).toStrictEqual(response.body.purchaseReportDetails[0]._id);
-    expect(purchaseOrdersRecord[0].purchaseOrderNumber).toStrictEqual(response.body.purchaseReportDetails[0].purchaseOrderNumber);
-    expect(purchaseReceivesRecord[0].warehouse).toStrictEqual(response.body.purchaseReportDetails[0].warehouse);
-    expect(purchaseOrdersRecord[0].vendorNumber).toStrictEqual(response.body.purchaseReportDetails[0].vendorNumber);
-    expect(purchaseOrdersRecord[0].vendorName).toStrictEqual(response.body.purchaseReportDetails[0].vendorName);
+    expect(purchaseOrdersRecord[0].purchaseOrderNumber).toStrictEqual(response.body.purchaseReportDetails[0].purchaseOrder.purchaseOrderNumber);
+    expect(purchaseReceivesRecord[0].warehouse).toStrictEqual(response.body.purchaseReportDetails[0].purchaseReceive.warehouse);
+    expect(purchaseOrdersRecord[0].vendorNumber).toStrictEqual(response.body.purchaseReportDetails[0].purchaseOrder.vendorNumber);
+    expect(purchaseOrdersRecord[0].vendorName).toStrictEqual(response.body.purchaseReportDetails[0].purchaseOrder.vendorName);
     expect(purchaseInvoicesRecord[0].createDate).toStrictEqual(response.body.purchaseReportDetails[0].createDate);
     expect(purchaseInvoicesRecord[0].noInvoice).toStrictEqual(response.body.purchaseReportDetails[0].noInvoice);
     expect(purchaseInvoicesRecord[0].item).toStrictEqual(response.body.purchaseReportDetails[0].item);
@@ -134,9 +134,9 @@ describe("retrieve all Purchase Report Details", () => {
     expect(purchaseInvoicesRecord[0].ppn).toStrictEqual(response.body.purchaseReportDetails[0].ppn);
     expect(purchaseInvoicesRecord[0].total).toStrictEqual(response.body.purchaseReportDetails[0].total);
     expect(purchaseInvoicesRecord[1]._id).toStrictEqual(response.body.purchaseReportDetails[1]._id);
-    expect(purchaseOrdersRecord[1].purchaseOrderNumber).toStrictEqual(response.body.purchaseReportDetails[1].purchaseOrderNumber);
+    expect(purchaseOrdersRecord[1].purchaseOrderNumber).toStrictEqual(response.body.purchaseReportDetails[1].purchaseOrder.purchaseOrderNumber);
     expect(purchaseInvoicesRecord[2]._id).toStrictEqual(response.body.purchaseReportDetails[2]._id);
-    expect(purchaseOrdersRecord[2].purchaseOrderNumber).toStrictEqual(response.body.purchaseReportDetails[2].purchaseOrderNumber);
+    expect(purchaseOrdersRecord[2].purchaseOrderNumber).toStrictEqual(response.body.purchaseReportDetails[2].purchaseOrder.purchaseOrderNumber);
 
     expect(response.body.pagination.page).toStrictEqual(1);
     expect(response.body.pagination.pageSize).toStrictEqual(10);
@@ -172,18 +172,18 @@ describe("retrieve all Purchase Report Details", () => {
     const purchaseInvoiceFactory = new PurchaseInvoiceFactory();
     const data = [
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[0],
-        purchaseOrderID: purchaseOrderResult.insertedIds[0],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[0],
+        purchaseOrder_id: purchaseOrderResult.insertedIds[0],
         dateInvoice: "2022-01-01",
       },
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[1],
-        purchaseOrderID: purchaseOrderResult.insertedIds[1],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[1],
+        purchaseOrder_id: purchaseOrderResult.insertedIds[1],
         dateInvoice: "2021-01-01",
       },
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[2],
-        purchaseOrderID: purchaseOrderResult.insertedIds[2],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[2],
+        purchaseOrder_id: purchaseOrderResult.insertedIds[2],
         dateInvoice: "2023-01-01",
       },
     ];
@@ -203,10 +203,10 @@ describe("retrieve all Purchase Report Details", () => {
     const purchaseReceivesRecord = await retrieveAll("purchaseReceives");
     const purchaseOrdersRecord = await retrieveAll("purchaseOrders");
     expect(purchaseInvoicesRecord[0]._id).toStrictEqual(response.body.purchaseReportDetails[0]._id);
-    expect(purchaseOrdersRecord[0].purchaseOrderNumber).toStrictEqual(response.body.purchaseReportDetails[0].purchaseOrderNumber);
-    expect(purchaseReceivesRecord[0].warehouse).toStrictEqual(response.body.purchaseReportDetails[0].warehouse);
-    expect(purchaseOrdersRecord[0].vendorNumber).toStrictEqual(response.body.purchaseReportDetails[0].vendorNumber);
-    expect(purchaseOrdersRecord[0].vendorName).toStrictEqual(response.body.purchaseReportDetails[0].vendorName);
+    expect(purchaseOrdersRecord[0].purchaseOrderNumber).toStrictEqual(response.body.purchaseReportDetails[0].purchaseOrder.purchaseOrderNumber);
+    expect(purchaseReceivesRecord[0].warehouse).toStrictEqual(response.body.purchaseReportDetails[0].purchaseReceive.warehouse);
+    expect(purchaseOrdersRecord[0].vendorNumber).toStrictEqual(response.body.purchaseReportDetails[0].purchaseOrder.vendorNumber);
+    expect(purchaseOrdersRecord[0].vendorName).toStrictEqual(response.body.purchaseReportDetails[0].purchaseOrder.vendorName);
     expect(purchaseInvoicesRecord[0].createDate).toStrictEqual(response.body.purchaseReportDetails[0].createDate);
     expect(purchaseInvoicesRecord[0].noInvoice).toStrictEqual(response.body.purchaseReportDetails[0].noInvoice);
     expect(purchaseInvoicesRecord[0].item).toStrictEqual(response.body.purchaseReportDetails[0].item);
@@ -219,12 +219,17 @@ describe("retrieve all Purchase Report Details", () => {
     expect(purchaseInvoicesRecord[0].ppn).toStrictEqual(response.body.purchaseReportDetails[0].ppn);
     expect(purchaseInvoicesRecord[0].total).toStrictEqual(response.body.purchaseReportDetails[0].total);
     expect(purchaseInvoicesRecord[2]._id).toStrictEqual(response.body.purchaseReportDetails[1]._id);
-    expect(purchaseOrdersRecord[2].purchaseOrderNumber).toStrictEqual(response.body.purchaseReportDetails[1].purchaseOrderNumber);
+    expect(purchaseOrdersRecord[2].purchaseOrderNumber).toStrictEqual(response.body.purchaseReportDetails[1].purchaseOrder.purchaseOrderNumber);
 
     expect(response.body.pagination.page).toStrictEqual(1);
     expect(response.body.pagination.pageSize).toStrictEqual(10);
     expect(response.body.pagination.pageCount).toStrictEqual(1);
     expect(response.body.pagination.totalDocument).toStrictEqual(2);
+    // validate filter
+    response.body.purchaseReportDetails.forEach((element:any) => {
+      expect((new Date(element.createDate)).getTime()).toBeGreaterThanOrEqual((new Date(filterDateFrom).getTime()));
+      expect((new Date(element.createDate)).getTime()).toBeLessThanOrEqual((new Date(filterDateTo).getTime()));
+    });
     // check database
   });
   it("1.5 retrieve all Purchase Report Details success, with filter supplier", async () => {
@@ -255,18 +260,18 @@ describe("retrieve all Purchase Report Details", () => {
     const purchaseInvoiceFactory = new PurchaseInvoiceFactory();
     const data = [
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[0],
-        purchaseOrderID: purchaseOrderResult.insertedIds[0],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[0],
+        purchaseOrder_id: purchaseOrderResult.insertedIds[0],
         supplier: "PT bukan ABC",
       },
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[1],
-        purchaseOrderID: purchaseOrderResult.insertedIds[1],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[1],
+        purchaseOrder_id: purchaseOrderResult.insertedIds[1],
         supplier: "PT ABC",
       },
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[2],
-        purchaseOrderID: purchaseOrderResult.insertedIds[2],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[2],
+        purchaseOrder_id: purchaseOrderResult.insertedIds[2],
         supplier: "PT ABC",
       },
     ];
@@ -285,10 +290,10 @@ describe("retrieve all Purchase Report Details", () => {
     const purchaseReceivesRecord = await retrieveAll("purchaseReceives");
     const purchaseOrdersRecord = await retrieveAll("purchaseOrders");
     expect(purchaseInvoicesRecord[1]._id).toStrictEqual(response.body.purchaseReportDetails[0]._id);
-    expect(purchaseOrdersRecord[1].purchaseOrderNumber).toStrictEqual(response.body.purchaseReportDetails[0].purchaseOrderNumber);
-    expect(purchaseReceivesRecord[1].warehouse).toStrictEqual(response.body.purchaseReportDetails[0].warehouse);
-    expect(purchaseOrdersRecord[1].vendorNumber).toStrictEqual(response.body.purchaseReportDetails[0].vendorNumber);
-    expect(purchaseOrdersRecord[1].vendorName).toStrictEqual(response.body.purchaseReportDetails[0].vendorName);
+    expect(purchaseOrdersRecord[1].purchaseOrderNumber).toStrictEqual(response.body.purchaseReportDetails[0].purchaseOrder.purchaseOrderNumber);
+    expect(purchaseReceivesRecord[1].warehouse).toStrictEqual(response.body.purchaseReportDetails[0].purchaseReceive.warehouse);
+    expect(purchaseOrdersRecord[1].vendorNumber).toStrictEqual(response.body.purchaseReportDetails[0].purchaseOrder.vendorNumber);
+    expect(purchaseOrdersRecord[1].vendorName).toStrictEqual(response.body.purchaseReportDetails[0].purchaseOrder.vendorName);
     expect(purchaseInvoicesRecord[1].createDate).toStrictEqual(response.body.purchaseReportDetails[0].createDate);
     expect(purchaseInvoicesRecord[1].noInvoice).toStrictEqual(response.body.purchaseReportDetails[0].noInvoice);
     expect(purchaseInvoicesRecord[1].item).toStrictEqual(response.body.purchaseReportDetails[0].item);
@@ -301,12 +306,16 @@ describe("retrieve all Purchase Report Details", () => {
     expect(purchaseInvoicesRecord[1].ppn).toStrictEqual(response.body.purchaseReportDetails[0].ppn);
     expect(purchaseInvoicesRecord[1].total).toStrictEqual(response.body.purchaseReportDetails[0].total);
     expect(purchaseInvoicesRecord[2]._id).toStrictEqual(response.body.purchaseReportDetails[1]._id);
-    expect(purchaseOrdersRecord[2].purchaseOrderNumber).toStrictEqual(response.body.purchaseReportDetails[1].purchaseOrderNumber);
+    expect(purchaseOrdersRecord[2].purchaseOrderNumber).toStrictEqual(response.body.purchaseReportDetails[1].purchaseOrder.purchaseOrderNumber);
 
     expect(response.body.pagination.page).toStrictEqual(1);
     expect(response.body.pagination.pageSize).toStrictEqual(10);
     expect(response.body.pagination.pageCount).toStrictEqual(1);
-    expect(response.body.pagination.totalDocument).toStrictEqual(2);
+    expect(response.body.pagination.totalDocument).toStrictEqual(2);    
+    // validate filter
+    response.body.purchaseReportDetails.forEach((element:any) => {
+      expect(element.supplier).toStrictEqual(filterSupplier);
+    });
     // check database
   });
   it("1.6 retrieve all Purchase Report Details success, with filter item", async () => {
@@ -337,18 +346,18 @@ describe("retrieve all Purchase Report Details", () => {
     const purchaseInvoiceFactory = new PurchaseInvoiceFactory();
     const data = [
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[0],
-        purchaseOrderID: purchaseOrderResult.insertedIds[0],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[0],
+        purchaseOrder_id: purchaseOrderResult.insertedIds[0],
         item: "item A",
       },
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[1],
-        purchaseOrderID: purchaseOrderResult.insertedIds[1],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[1],
+        purchaseOrder_id: purchaseOrderResult.insertedIds[1],
         item: "item B",
       },
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[2],
-        purchaseOrderID: purchaseOrderResult.insertedIds[2],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[2],
+        purchaseOrder_id: purchaseOrderResult.insertedIds[2],
         item: "item B",
       },
     ];
@@ -367,10 +376,10 @@ describe("retrieve all Purchase Report Details", () => {
     const purchaseReceivesRecord = await retrieveAll("purchaseReceives");
     const purchaseOrdersRecord = await retrieveAll("purchaseOrders");
     expect(purchaseInvoicesRecord[1]._id).toStrictEqual(response.body.purchaseReportDetails[0]._id);
-    expect(purchaseOrdersRecord[1].purchaseOrderNumber).toStrictEqual(response.body.purchaseReportDetails[0].purchaseOrderNumber);
-    expect(purchaseReceivesRecord[1].warehouse).toStrictEqual(response.body.purchaseReportDetails[0].warehouse);
-    expect(purchaseOrdersRecord[1].vendorNumber).toStrictEqual(response.body.purchaseReportDetails[0].vendorNumber);
-    expect(purchaseOrdersRecord[1].vendorName).toStrictEqual(response.body.purchaseReportDetails[0].vendorName);
+    expect(purchaseOrdersRecord[1].purchaseOrderNumber).toStrictEqual(response.body.purchaseReportDetails[0].purchaseOrder.purchaseOrderNumber);
+    expect(purchaseReceivesRecord[1].warehouse).toStrictEqual(response.body.purchaseReportDetails[0].purchaseReceive.warehouse);
+    expect(purchaseOrdersRecord[1].vendorNumber).toStrictEqual(response.body.purchaseReportDetails[0].purchaseOrder.vendorNumber);
+    expect(purchaseOrdersRecord[1].vendorName).toStrictEqual(response.body.purchaseReportDetails[0].purchaseOrder.vendorName);
     expect(purchaseInvoicesRecord[1].createDate).toStrictEqual(response.body.purchaseReportDetails[0].createDate);
     expect(purchaseInvoicesRecord[1].noInvoice).toStrictEqual(response.body.purchaseReportDetails[0].noInvoice);
     expect(purchaseInvoicesRecord[1].item).toStrictEqual(response.body.purchaseReportDetails[0].item);
@@ -383,12 +392,16 @@ describe("retrieve all Purchase Report Details", () => {
     expect(purchaseInvoicesRecord[1].ppn).toStrictEqual(response.body.purchaseReportDetails[0].ppn);
     expect(purchaseInvoicesRecord[1].total).toStrictEqual(response.body.purchaseReportDetails[0].total);
     expect(purchaseInvoicesRecord[2]._id).toStrictEqual(response.body.purchaseReportDetails[1]._id);
-    expect(purchaseOrdersRecord[2].purchaseOrderNumber).toStrictEqual(response.body.purchaseReportDetails[1].purchaseOrderNumber);
+    expect(purchaseOrdersRecord[2].purchaseOrderNumber).toStrictEqual(response.body.purchaseReportDetails[1].purchaseOrder.purchaseOrderNumber);
 
     expect(response.body.pagination.page).toStrictEqual(1);
     expect(response.body.pagination.pageSize).toStrictEqual(10);
     expect(response.body.pagination.pageCount).toStrictEqual(1);
-    expect(response.body.pagination.totalDocument).toStrictEqual(2);
+    expect(response.body.pagination.totalDocument).toStrictEqual(2);    
+    // validate filter
+    response.body.purchaseReportDetails.forEach((element:any) => {
+      expect(element.item).toStrictEqual(filterItem);
+    });
     // check database
   });
   it("1.7 retrieve all Purchase Report Details success, with filter warehouse", async () => {
@@ -419,18 +432,18 @@ describe("retrieve all Purchase Report Details", () => {
     const purchaseInvoiceFactory = new PurchaseInvoiceFactory();
     const data = [
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[0],
-        purchaseOrderID: purchaseOrderResult.insertedIds[0],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[0],
+        purchaseOrder_id: purchaseOrderResult.insertedIds[0],
         warehouse: "warehouse A",
       },
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[1],
-        purchaseOrderID: purchaseOrderResult.insertedIds[1],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[1],
+        purchaseOrder_id: purchaseOrderResult.insertedIds[1],
         warehouse: "warehouse A",
       },
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[2],
-        purchaseOrderID: purchaseOrderResult.insertedIds[2],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[2],
+        purchaseOrder_id: purchaseOrderResult.insertedIds[2],
         warehouse: "warehouse B",
       },
     ];
@@ -449,10 +462,10 @@ describe("retrieve all Purchase Report Details", () => {
     const purchaseReceivesRecord = await retrieveAll("purchaseReceives");
     const purchaseOrdersRecord = await retrieveAll("purchaseOrders");
     expect(purchaseInvoicesRecord[0]._id).toStrictEqual(response.body.purchaseReportDetails[0]._id);
-    expect(purchaseOrdersRecord[0].purchaseOrderNumber).toStrictEqual(response.body.purchaseReportDetails[0].purchaseOrderNumber);
-    expect(purchaseReceivesRecord[0].warehouse).toStrictEqual(response.body.purchaseReportDetails[0].warehouse);
-    expect(purchaseOrdersRecord[0].vendorNumber).toStrictEqual(response.body.purchaseReportDetails[0].vendorNumber);
-    expect(purchaseOrdersRecord[0].vendorName).toStrictEqual(response.body.purchaseReportDetails[0].vendorName);
+    expect(purchaseOrdersRecord[0].purchaseOrderNumber).toStrictEqual(response.body.purchaseReportDetails[0].purchaseOrder.purchaseOrderNumber);
+    expect(purchaseReceivesRecord[0].warehouse).toStrictEqual(response.body.purchaseReportDetails[0].purchaseReceive.warehouse);
+    expect(purchaseOrdersRecord[0].vendorNumber).toStrictEqual(response.body.purchaseReportDetails[0].purchaseOrder.vendorNumber);
+    expect(purchaseOrdersRecord[0].vendorName).toStrictEqual(response.body.purchaseReportDetails[0].purchaseOrder.vendorName);
     expect(purchaseInvoicesRecord[0].createDate).toStrictEqual(response.body.purchaseReportDetails[0].createDate);
     expect(purchaseInvoicesRecord[0].noInvoice).toStrictEqual(response.body.purchaseReportDetails[0].noInvoice);
     expect(purchaseInvoicesRecord[0].item).toStrictEqual(response.body.purchaseReportDetails[0].item);
@@ -465,12 +478,16 @@ describe("retrieve all Purchase Report Details", () => {
     expect(purchaseInvoicesRecord[0].ppn).toStrictEqual(response.body.purchaseReportDetails[0].ppn);
     expect(purchaseInvoicesRecord[0].total).toStrictEqual(response.body.purchaseReportDetails[0].total);
     expect(purchaseInvoicesRecord[1]._id).toStrictEqual(response.body.purchaseReportDetails[1]._id);
-    expect(purchaseOrdersRecord[1].purchaseOrderNumber).toStrictEqual(response.body.purchaseReportDetails[1].purchaseOrderNumber);
+    expect(purchaseOrdersRecord[1].purchaseOrderNumber).toStrictEqual(response.body.purchaseReportDetails[1].purchaseOrder.purchaseOrderNumber);
 
     expect(response.body.pagination.page).toStrictEqual(1);
     expect(response.body.pagination.pageSize).toStrictEqual(10);
     expect(response.body.pagination.pageCount).toStrictEqual(1);
-    expect(response.body.pagination.totalDocument).toStrictEqual(2);
+    expect(response.body.pagination.totalDocument).toStrictEqual(2);    
+    // validate filter
+    response.body.purchaseReportDetails.forEach((element:any) => {
+      expect(element.purchaseReceive.warehouse).toStrictEqual(filterWarehouse);
+    });
     // check database
   });
   it("1.8 retrieve all Purchase Report Details success, with filter date, supplier, item, and warehouse", async () => {
@@ -501,32 +518,32 @@ describe("retrieve all Purchase Report Details", () => {
     const purchaseInvoiceFactory = new PurchaseInvoiceFactory();
     const data = [
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[0],
-        purchaseOrderID: purchaseOrderResult.insertedIds[0],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[0],
+        purchaseOrder_id: purchaseOrderResult.insertedIds[0],
         dateInvoice: "2022-01-01",
         supplier: "PT ABC",
         item: "item B",
         warehouse: "warehouse A",
       },
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[1],
-        purchaseOrderID: purchaseOrderResult.insertedIds[1],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[1],
+        purchaseOrder_id: purchaseOrderResult.insertedIds[1],
         dateInvoice: "2021-01-01",
         supplier: "PT ABC",
         item: "item B",
         warehouse: "warehouse A",
       },
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[2],
-        purchaseOrderID: purchaseOrderResult.insertedIds[2],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[2],
+        purchaseOrder_id: purchaseOrderResult.insertedIds[2],
         dateInvoice: "2023-01-01",
         supplier: "PT bukan ABC",
         item: "item B",
         warehouse: "warehouse A",
       },
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[3],
-        purchaseOrderID: purchaseOrderResult.insertedIds[3],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[3],
+        purchaseOrder_id: purchaseOrderResult.insertedIds[3],
         dateInvoice: "2023-01-01",
         supplier: "PT ABC",
         item: "item B",
@@ -554,10 +571,10 @@ describe("retrieve all Purchase Report Details", () => {
     const purchaseReceivesRecord = await retrieveAll("purchaseReceives");
     const purchaseOrdersRecord = await retrieveAll("purchaseOrders");
     expect(purchaseInvoicesRecord[0]._id).toStrictEqual(response.body.purchaseReportDetails[0]._id);
-    expect(purchaseOrdersRecord[0].purchaseOrderNumber).toStrictEqual(response.body.purchaseReportDetails[0].purchaseOrderNumber);
-    expect(purchaseReceivesRecord[0].warehouse).toStrictEqual(response.body.purchaseReportDetails[0].warehouse);
-    expect(purchaseOrdersRecord[0].vendorNumber).toStrictEqual(response.body.purchaseReportDetails[0].vendorNumber);
-    expect(purchaseOrdersRecord[0].vendorName).toStrictEqual(response.body.purchaseReportDetails[0].vendorName);
+    expect(purchaseOrdersRecord[0].purchaseOrderNumber).toStrictEqual(response.body.purchaseReportDetails[0].purchaseOrder.purchaseOrderNumber);
+    expect(purchaseReceivesRecord[0].warehouse).toStrictEqual(response.body.purchaseReportDetails[0].purchaseReceive.warehouse);
+    expect(purchaseOrdersRecord[0].vendorNumber).toStrictEqual(response.body.purchaseReportDetails[0].purchaseOrder.vendorNumber);
+    expect(purchaseOrdersRecord[0].vendorName).toStrictEqual(response.body.purchaseReportDetails[0].purchaseOrder.vendorName);
     expect(purchaseInvoicesRecord[0].createDate).toStrictEqual(response.body.purchaseReportDetails[0].createDate);
     expect(purchaseInvoicesRecord[0].noInvoice).toStrictEqual(response.body.purchaseReportDetails[0].noInvoice);
     expect(purchaseInvoicesRecord[0].item).toStrictEqual(response.body.purchaseReportDetails[0].item);
@@ -574,6 +591,14 @@ describe("retrieve all Purchase Report Details", () => {
     expect(response.body.pagination.pageSize).toStrictEqual(10);
     expect(response.body.pagination.pageCount).toStrictEqual(1);
     expect(response.body.pagination.totalDocument).toStrictEqual(1);
+    // validate filter
+    response.body.purchaseReportDetails.forEach((element:any) => {
+      expect(element.supplier).toStrictEqual(filterSupplier);
+      expect(element.item).toStrictEqual(filterItem);
+      expect(element.purchaseReceive.warehouse).toStrictEqual(filterWarehouse);
+      expect((new Date(element.createDate)).getTime()).toBeGreaterThanOrEqual((new Date(filterDateFrom).getTime()));
+      expect((new Date(element.createDate)).getTime()).toBeLessThanOrEqual((new Date(filterDateTo).getTime()));
+    });
     // check database
   });
   it("1.9 retrieve all Purchase Report Details success, with search supplier", async () => {
@@ -604,18 +629,18 @@ describe("retrieve all Purchase Report Details", () => {
     const purchaseInvoiceFactory = new PurchaseInvoiceFactory();
     const data = [
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[0],
-        purchaseOrderID: purchaseOrderResult.insertedIds[0],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[0],
+        purchaseOrder_id: purchaseOrderResult.insertedIds[0],
         supplier: "PT bukan ABC",
       },
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[1],
-        purchaseOrderID: purchaseOrderResult.insertedIds[1],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[1],
+        purchaseOrder_id: purchaseOrderResult.insertedIds[1],
         supplier: "PT ABC",
       },
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[2],
-        purchaseOrderID: purchaseOrderResult.insertedIds[2],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[2],
+        purchaseOrder_id: purchaseOrderResult.insertedIds[2],
         supplier: "PT ABC juga",
       },
     ];
@@ -634,10 +659,10 @@ describe("retrieve all Purchase Report Details", () => {
     const purchaseReceivesRecord = await retrieveAll("purchaseReceives");
     const purchaseOrdersRecord = await retrieveAll("purchaseOrders");
     expect(purchaseInvoicesRecord[1]._id).toStrictEqual(response.body.purchaseReportDetails[0]._id);
-    expect(purchaseOrdersRecord[1].purchaseOrderNumber).toStrictEqual(response.body.purchaseReportDetails[0].purchaseOrderNumber);
-    expect(purchaseReceivesRecord[1].warehouse).toStrictEqual(response.body.purchaseReportDetails[0].warehouse);
-    expect(purchaseOrdersRecord[1].vendorNumber).toStrictEqual(response.body.purchaseReportDetails[0].vendorNumber);
-    expect(purchaseOrdersRecord[1].vendorName).toStrictEqual(response.body.purchaseReportDetails[0].vendorName);
+    expect(purchaseOrdersRecord[1].purchaseOrderNumber).toStrictEqual(response.body.purchaseReportDetails[0].purchaseOrder.purchaseOrderNumber);
+    expect(purchaseReceivesRecord[1].warehouse).toStrictEqual(response.body.purchaseReportDetails[0].purchaseReceive.warehouse);
+    expect(purchaseOrdersRecord[1].vendorNumber).toStrictEqual(response.body.purchaseReportDetails[0].purchaseOrder.vendorNumber);
+    expect(purchaseOrdersRecord[1].vendorName).toStrictEqual(response.body.purchaseReportDetails[0].purchaseOrder.vendorName);
     expect(purchaseInvoicesRecord[1].createDate).toStrictEqual(response.body.purchaseReportDetails[0].createDate);
     expect(purchaseInvoicesRecord[1].noInvoice).toStrictEqual(response.body.purchaseReportDetails[0].noInvoice);
     expect(purchaseInvoicesRecord[1].item).toStrictEqual(response.body.purchaseReportDetails[0].item);
@@ -650,12 +675,16 @@ describe("retrieve all Purchase Report Details", () => {
     expect(purchaseInvoicesRecord[1].ppn).toStrictEqual(response.body.purchaseReportDetails[0].ppn);
     expect(purchaseInvoicesRecord[1].total).toStrictEqual(response.body.purchaseReportDetails[0].total);
     expect(purchaseInvoicesRecord[2]._id).toStrictEqual(response.body.purchaseReportDetails[1]._id);
-    expect(purchaseOrdersRecord[2].purchaseOrderNumber).toStrictEqual(response.body.purchaseReportDetails[1].purchaseOrderNumber);
+    expect(purchaseOrdersRecord[2].purchaseOrderNumber).toStrictEqual(response.body.purchaseReportDetails[1].purchaseOrder.purchaseOrderNumber);
 
     expect(response.body.pagination.page).toStrictEqual(1);
     expect(response.body.pagination.pageSize).toStrictEqual(10);
     expect(response.body.pagination.pageCount).toStrictEqual(1);
-    expect(response.body.pagination.totalDocument).toStrictEqual(2);
+    expect(response.body.pagination.totalDocument).toStrictEqual(2);    
+    // validate filter
+    response.body.purchaseReportDetails.forEach((element:any) => {
+      expect(element.supplier).toContain(searchSupplier);
+    });
     // check database
   });
 });

@@ -90,13 +90,13 @@ describe("retrieve all Sales Report", () => {
     const salesInvoiceFactory = new SalesInvoiceFactory();
     const data = [
       {
-        deliveryNotesID: deliveryNoteResult.insertedIds[0],
+        deliveryNotes_id: deliveryNoteResult.insertedIds[0],
       },
       {
-        deliveryNotesID: deliveryNoteResult.insertedIds[1],
+        deliveryNotes_id: deliveryNoteResult.insertedIds[1],
       },
       {
-        deliveryNotesID: deliveryNoteResult.insertedIds[2],
+        deliveryNotes_id: deliveryNoteResult.insertedIds[2],
       },
     ];
     salesInvoiceFactory.sequence(data);
@@ -112,7 +112,7 @@ describe("retrieve all Sales Report", () => {
     const deliveryNoteRecord = await retrieveAll("deliveryNotes");
     expect(salesInvoiceRecord[0]._id).toStrictEqual(response.body.salesReports[0]._id);
     expect(salesInvoiceRecord[0].productCode).toStrictEqual(response.body.salesReports[0].productCode);
-    expect(deliveryNoteRecord[0].warehouse).toStrictEqual(response.body.salesReports[0].warehouse);
+    expect(deliveryNoteRecord[0].warehouse).toStrictEqual(response.body.salesReports[0].deliveryNote.warehouse);
     expect(salesInvoiceRecord[0].description).toStrictEqual(response.body.salesReports[0].description);
     expect(salesInvoiceRecord[0].principle).toStrictEqual(response.body.salesReports[0].principle);
     expect(salesInvoiceRecord[0].totalInvoiced).toStrictEqual(response.body.salesReports[0].totalInvoiced);
@@ -159,15 +159,15 @@ describe("retrieve all Sales Report", () => {
     const salesInvoiceFactory = new SalesInvoiceFactory();
     const data = [
       {
-        deliveryNotesID: deliveryNoteResult.insertedIds[0],
+        deliveryNotes_id: deliveryNoteResult.insertedIds[0],
         dateInvoice: "2022-01-01",
       },
       {
-        deliveryNotesID: deliveryNoteResult.insertedIds[1],
+        deliveryNotes_id: deliveryNoteResult.insertedIds[1],
         dateInvoice: "2021-01-01",
       },
       {
-        deliveryNotesID: deliveryNoteResult.insertedIds[2],
+        deliveryNotes_id: deliveryNoteResult.insertedIds[2],
         dateInvoice: "2023-01-01",
       },
     ];
@@ -187,7 +187,7 @@ describe("retrieve all Sales Report", () => {
     const deliveryNoteRecord = await retrieveAll("deliveryNotes");
     expect(salesInvoiceRecord[0]._id).toStrictEqual(response.body.salesReports[0]._id);
     expect(salesInvoiceRecord[0].productCode).toStrictEqual(response.body.salesReports[0].productCode);
-    expect(deliveryNoteRecord[0].warehouse).toStrictEqual(response.body.salesReports[0].warehouse);
+    expect(deliveryNoteRecord[0].warehouse).toStrictEqual(response.body.salesReports[0].deliveryNote.warehouse);
     expect(salesInvoiceRecord[0].description).toStrictEqual(response.body.salesReports[0].description);
     expect(salesInvoiceRecord[0].principle).toStrictEqual(response.body.salesReports[0].principle);
     expect(salesInvoiceRecord[0].totalInvoiced).toStrictEqual(response.body.salesReports[0].totalInvoiced);
@@ -204,6 +204,11 @@ describe("retrieve all Sales Report", () => {
     expect(response.body.pagination.pageSize).toStrictEqual(10);
     expect(response.body.pagination.pageCount).toStrictEqual(1);
     expect(response.body.pagination.totalDocument).toStrictEqual(2);
+    // validate filter
+    response.body.salesReports.forEach((element:any) => {
+      expect((new Date(element.createDate)).getTime()).toBeGreaterThanOrEqual((new Date(filterDateFrom).getTime()));
+      expect((new Date(element.createDate)).getTime()).toBeLessThanOrEqual((new Date(filterDateTo).getTime()));
+    });
     // check database
   });
   it("1.5 retrieve all Sales Report success, with filter item", async () => {
@@ -232,15 +237,15 @@ describe("retrieve all Sales Report", () => {
     const salesInvoiceFactory = new SalesInvoiceFactory();
     const data = [
       {
-        deliveryNotesID: deliveryNoteResult.insertedIds[0],
+        deliveryNotes_id: deliveryNoteResult.insertedIds[0],
         item: "item A",
       },
       {
-        deliveryNotesID: deliveryNoteResult.insertedIds[1],
+        deliveryNotes_id: deliveryNoteResult.insertedIds[1],
         item: "item B",
       },
       {
-        deliveryNotesID: deliveryNoteResult.insertedIds[2],
+        deliveryNotes_id: deliveryNoteResult.insertedIds[2],
         item: "item B",
       },
     ];
@@ -259,7 +264,7 @@ describe("retrieve all Sales Report", () => {
     const deliveryNoteRecord = await retrieveAll("deliveryNotes");
     expect(salesInvoiceRecord[1]._id).toStrictEqual(response.body.salesReports[0]._id);
     expect(salesInvoiceRecord[1].productCode).toStrictEqual(response.body.salesReports[0].productCode);
-    expect(deliveryNoteRecord[1].warehouse).toStrictEqual(response.body.salesReports[0].warehouse);
+    expect(deliveryNoteRecord[1].warehouse).toStrictEqual(response.body.salesReports[0].deliveryNote.warehouse);
     expect(salesInvoiceRecord[1].description).toStrictEqual(response.body.salesReports[0].description);
     expect(salesInvoiceRecord[1].principle).toStrictEqual(response.body.salesReports[0].principle);
     expect(salesInvoiceRecord[1].totalInvoiced).toStrictEqual(response.body.salesReports[0].totalInvoiced);
@@ -276,6 +281,10 @@ describe("retrieve all Sales Report", () => {
     expect(response.body.pagination.pageSize).toStrictEqual(10);
     expect(response.body.pagination.pageCount).toStrictEqual(1);
     expect(response.body.pagination.totalDocument).toStrictEqual(2);
+    // validate filter
+    response.body.salesReports.forEach((element:any) => {
+      expect(element.item).toStrictEqual(filterItem);
+    });
     // check database
   });
   it("1.6 retrieve all Sales Report success, with filter warehouse", async () => {
@@ -304,15 +313,15 @@ describe("retrieve all Sales Report", () => {
     const salesInvoiceFactory = new SalesInvoiceFactory();
     const data = [
       {
-        deliveryNotesID: deliveryNoteResult.insertedIds[0],
+        deliveryNotes_id: deliveryNoteResult.insertedIds[0],
         warehouse: "warehouse A",
       },
       {
-        deliveryNotesID: deliveryNoteResult.insertedIds[1],
+        deliveryNotes_id: deliveryNoteResult.insertedIds[1],
         warehouse: "warehouse A",
       },
       {
-        deliveryNotesID: deliveryNoteResult.insertedIds[2],
+        deliveryNotes_id: deliveryNoteResult.insertedIds[2],
         warehouse: "warehouse B",
       },
     ];
@@ -331,7 +340,7 @@ describe("retrieve all Sales Report", () => {
     const deliveryNoteRecord = await retrieveAll("deliveryNotes");
     expect(salesInvoiceRecord[0]._id).toStrictEqual(response.body.salesReports[0]._id);
     expect(salesInvoiceRecord[0].productCode).toStrictEqual(response.body.salesReports[0].productCode);
-    expect(deliveryNoteRecord[0].warehouse).toStrictEqual(response.body.salesReports[0].warehouse);
+    expect(deliveryNoteRecord[0].warehouse).toStrictEqual(response.body.salesReports[0].deliveryNote.warehouse);
     expect(salesInvoiceRecord[0].description).toStrictEqual(response.body.salesReports[0].description);
     expect(salesInvoiceRecord[0].principle).toStrictEqual(response.body.salesReports[0].principle);
     expect(salesInvoiceRecord[0].totalInvoiced).toStrictEqual(response.body.salesReports[0].totalInvoiced);
@@ -347,7 +356,11 @@ describe("retrieve all Sales Report", () => {
     expect(response.body.pagination.page).toStrictEqual(1);
     expect(response.body.pagination.pageSize).toStrictEqual(10);
     expect(response.body.pagination.pageCount).toStrictEqual(1);
-    expect(response.body.pagination.totalDocument).toStrictEqual(2);
+    expect(response.body.pagination.totalDocument).toStrictEqual(2);    
+    // validate filter
+    response.body.salesReports.forEach((element:any) => {
+      expect(element.deliveryNote.warehouse).toStrictEqual(filterWarehouse);
+    });
     // check database
   });
   it("1.7 retrieve all Sales Report success, with filter date, item, and warehouse", async () => {
@@ -376,25 +389,25 @@ describe("retrieve all Sales Report", () => {
     const salesInvoiceFactory = new SalesInvoiceFactory();
     const data = [
       {
-        deliveryNotesID: deliveryNoteResult.insertedIds[0],
+        deliveryNotes_id: deliveryNoteResult.insertedIds[0],
         dateInvoice: "2022-01-01",
         item: "item B",
         warehouse: "warehouse A",
       },
       {
-        deliveryNotesID: deliveryNoteResult.insertedIds[1],
+        deliveryNotes_id: deliveryNoteResult.insertedIds[1],
         dateInvoice: "2021-01-01",
         item: "item B",
         warehouse: "warehouse A",
       },
       {
-        deliveryNotesID: deliveryNoteResult.insertedIds[2],
+        deliveryNotes_id: deliveryNoteResult.insertedIds[2],
         dateInvoice: "2023-01-01",
         item: "item A",
         warehouse: "warehouse A",
       },
       {
-        deliveryNotesID: deliveryNoteResult.insertedIds[3],
+        deliveryNotes_id: deliveryNoteResult.insertedIds[3],
         dateInvoice: "2023-01-01",
         item: "item B",
         warehouse: "warehouse B",
@@ -420,7 +433,7 @@ describe("retrieve all Sales Report", () => {
     const deliveryNoteRecord = await retrieveAll("deliveryNotes");
     expect(salesInvoiceRecord[0]._id).toStrictEqual(response.body.salesReports[0]._id);
     expect(salesInvoiceRecord[0].productCode).toStrictEqual(response.body.salesReports[0].productCode);
-    expect(deliveryNoteRecord[0].warehouse).toStrictEqual(response.body.salesReports[0].warehouse);
+    expect(deliveryNoteRecord[0].warehouse).toStrictEqual(response.body.salesReports[0].deliveryNote.warehouse);
     expect(salesInvoiceRecord[0].description).toStrictEqual(response.body.salesReports[0].description);
     expect(salesInvoiceRecord[0].principle).toStrictEqual(response.body.salesReports[0].principle);
     expect(salesInvoiceRecord[0].totalInvoiced).toStrictEqual(response.body.salesReports[0].totalInvoiced);
@@ -434,7 +447,14 @@ describe("retrieve all Sales Report", () => {
     expect(response.body.pagination.page).toStrictEqual(1);
     expect(response.body.pagination.pageSize).toStrictEqual(10);
     expect(response.body.pagination.pageCount).toStrictEqual(1);
-    expect(response.body.pagination.totalDocument).toStrictEqual(1);
+    expect(response.body.pagination.totalDocument).toStrictEqual(1);    
+    // validate filter
+    response.body.salesReports.forEach((element:any) => {
+      expect(element.item).toStrictEqual(filterItem);
+      expect(element.deliveryNote.warehouse).toStrictEqual(filterWarehouse);
+      expect((new Date(element.createDate)).getTime()).toBeGreaterThanOrEqual((new Date(filterDateFrom).getTime()));
+      expect((new Date(element.createDate)).getTime()).toBeLessThanOrEqual((new Date(filterDateTo).getTime()));
+    });
     // check database
   });
   it("1.8 retrieve all Sales Report success, with search item", async () => {
@@ -463,15 +483,15 @@ describe("retrieve all Sales Report", () => {
     const salesInvoiceFactory = new SalesInvoiceFactory();
     const data = [
       {
-        deliveryNotesID: deliveryNoteResult.insertedIds[0],
+        deliveryNotes_id: deliveryNoteResult.insertedIds[0],
         item: "item bukan ABC",
       },
       {
-        deliveryNotesID: deliveryNoteResult.insertedIds[1],
+        deliveryNotes_id: deliveryNoteResult.insertedIds[1],
         item: "item ABC",
       },
       {
-        deliveryNotesID: deliveryNoteResult.insertedIds[2],
+        deliveryNotes_id: deliveryNoteResult.insertedIds[2],
         item: "item ABC juga",
       },
     ];
@@ -490,7 +510,7 @@ describe("retrieve all Sales Report", () => {
     const deliveryNoteRecord = await retrieveAll("deliveryNotes");
     expect(salesInvoiceRecord[1]._id).toStrictEqual(response.body.salesReports[0]._id);
     expect(salesInvoiceRecord[1].productCode).toStrictEqual(response.body.salesReports[0].productCode);
-    expect(deliveryNoteRecord[1].warehouse).toStrictEqual(response.body.salesReports[0].warehouse);
+    expect(deliveryNoteRecord[1].warehouse).toStrictEqual(response.body.salesReports[0].deliveryNote.warehouse);
     expect(salesInvoiceRecord[1].description).toStrictEqual(response.body.salesReports[0].description);
     expect(salesInvoiceRecord[1].principle).toStrictEqual(response.body.salesReports[0].principle);
     expect(salesInvoiceRecord[1].totalInvoiced).toStrictEqual(response.body.salesReports[0].totalInvoiced);
@@ -506,7 +526,11 @@ describe("retrieve all Sales Report", () => {
     expect(response.body.pagination.page).toStrictEqual(1);
     expect(response.body.pagination.pageSize).toStrictEqual(10);
     expect(response.body.pagination.pageCount).toStrictEqual(1);
-    expect(response.body.pagination.totalDocument).toStrictEqual(2);
+    expect(response.body.pagination.totalDocument).toStrictEqual(2);    
+    // validate filter
+    response.body.salesReports.forEach((element:any) => {
+      expect(element.item).toContain(searchItem);
+    });
     // check database
   });
 });

@@ -101,16 +101,16 @@ describe("retrieve all Sales Report Per Customer", () => {
     const salesInvoiceFactory = new SalesInvoiceFactory();
     const data = [
       {
-        userID: userResult.insertedIds[0],        
-        customerID: customerResult.insertedIds[0],
+        user_id: userResult.insertedIds[0],        
+        customer_id: customerResult.insertedIds[0],
       },
       {
-        userID: userResult.insertedIds[1],        
-        customerID: customerResult.insertedIds[1],
+        user_id: userResult.insertedIds[1],        
+        customer_id: customerResult.insertedIds[1],
       },
       {
-        userID: userResult.insertedIds[2],        
-        customerID: customerResult.insertedIds[2],
+        user_id: userResult.insertedIds[2],        
+        customer_id: customerResult.insertedIds[2],
       },
     ];
     salesInvoiceFactory.sequence(data);
@@ -129,10 +129,10 @@ describe("retrieve all Sales Report Per Customer", () => {
     expect(salesInvoiceRecord[0].invoice).toStrictEqual(response.body.salesReportPerCustomers[0].invoice);
     expect(salesInvoiceRecord[0].invoiceDate).toStrictEqual(response.body.salesReportPerCustomers[0].invoiceDate);
     expect(salesInvoiceRecord[0].noFakturPajak).toStrictEqual(response.body.salesReportPerCustomers[0].noFakturPajak);
-    expect(salesInvoiceRecord[0].soldTo).toStrictEqual(response.body.salesReportPerCustomers[0].soldTo);
-    expect(salesInvoiceRecord[0].salesman).toStrictEqual(response.body.salesReportPerCustomers[0].salesman);
-    expect(salesInvoiceRecord[0].kdSalesman).toStrictEqual(response.body.salesReportPerCustomers[0].kdSalesman);
-    expect(salesInvoiceRecord[0].name).toStrictEqual(response.body.salesReportPerCustomers[0].name);
+    expect(customersRecord[0].soldTo).toStrictEqual(response.body.salesReportPerCustomers[0].customer.soldTo);
+    expect(usersRecord[0].salesman).toStrictEqual(response.body.salesReportPerCustomers[0].user.salesman);
+    expect(usersRecord[0].kdSalesman).toStrictEqual(response.body.salesReportPerCustomers[0].user.kdSalesman);
+    expect(customersRecord[0].name).toStrictEqual(response.body.salesReportPerCustomers[0].customer.name);
     expect(salesInvoiceRecord[0].dpp).toStrictEqual(response.body.salesReportPerCustomers[0].dpp);
     expect(salesInvoiceRecord[0].ppn).toStrictEqual(response.body.salesReportPerCustomers[0].ppn);
     expect(salesInvoiceRecord[0].total).toStrictEqual(response.body.salesReportPerCustomers[0].total);
@@ -185,18 +185,18 @@ describe("retrieve all Sales Report Per Customer", () => {
     const salesInvoiceFactory = new SalesInvoiceFactory();
     const data = [
       {
-        userID: userResult.insertedIds[0],        
-        customerID: customerResult.insertedIds[0],
+        user_id: userResult.insertedIds[0],        
+        customer_id: customerResult.insertedIds[0],
         invoiceDate: "2022-01-01",
       },
       {
-        userID: userResult.insertedIds[1],        
-        customerID: customerResult.insertedIds[1],
+        user_id: userResult.insertedIds[1],        
+        customer_id: customerResult.insertedIds[1],
         invoiceDate: "2021-01-01",
       },
       {
-        userID: userResult.insertedIds[2],        
-        customerID: customerResult.insertedIds[2],
+        user_id: userResult.insertedIds[2],        
+        customer_id: customerResult.insertedIds[2],
         invoiceDate: "2023-01-01",
       },
     ];
@@ -219,10 +219,10 @@ describe("retrieve all Sales Report Per Customer", () => {
     expect(salesInvoiceRecord[0].invoice).toStrictEqual(response.body.salesReportPerCustomers[0].invoice);
     expect(salesInvoiceRecord[0].invoiceDate).toStrictEqual(response.body.salesReportPerCustomers[0].invoiceDate);
     expect(salesInvoiceRecord[0].noFakturPajak).toStrictEqual(response.body.salesReportPerCustomers[0].noFakturPajak);
-    expect(salesInvoiceRecord[0].soldTo).toStrictEqual(response.body.salesReportPerCustomers[0].soldTo);
-    expect(salesInvoiceRecord[0].salesman).toStrictEqual(response.body.salesReportPerCustomers[0].salesman);
-    expect(salesInvoiceRecord[0].kdSalesman).toStrictEqual(response.body.salesReportPerCustomers[0].kdSalesman);
-    expect(salesInvoiceRecord[0].name).toStrictEqual(response.body.salesReportPerCustomers[0].name);
+    expect(customersRecord[0].soldTo).toStrictEqual(response.body.salesReportPerCustomers[0].customer.soldTo);
+    expect(usersRecord[0].salesman).toStrictEqual(response.body.salesReportPerCustomers[0].user.salesman);
+    expect(usersRecord[0].kdSalesman).toStrictEqual(response.body.salesReportPerCustomers[0].user.kdSalesman);
+    expect(customersRecord[0].name).toStrictEqual(response.body.salesReportPerCustomers[0].customer.name);
     expect(salesInvoiceRecord[0].dpp).toStrictEqual(response.body.salesReportPerCustomers[0].dpp);
     expect(salesInvoiceRecord[0].ppn).toStrictEqual(response.body.salesReportPerCustomers[0].ppn);
     expect(salesInvoiceRecord[0].total).toStrictEqual(response.body.salesReportPerCustomers[0].total);
@@ -232,7 +232,12 @@ describe("retrieve all Sales Report Per Customer", () => {
     expect(response.body.pagination.page).toStrictEqual(1);
     expect(response.body.pagination.pageSize).toStrictEqual(10);
     expect(response.body.pagination.pageCount).toStrictEqual(1);
-    expect(response.body.pagination.totalDocument).toStrictEqual(2);
+    expect(response.body.pagination.totalDocument).toStrictEqual(2); 
+    // validate filter
+    response.body.salesReportPerCustomers.forEach((element:any) => {
+      expect((new Date(element.invoiceDate)).getTime()).toBeGreaterThanOrEqual((new Date(filterDateFrom).getTime()));
+      expect((new Date(element.invoiceDate)).getTime()).toBeLessThanOrEqual((new Date(filterDateTo).getTime()));
+    });
     // check database
   });
   it("1.5 retrieve all Sales Report Per Customer success, with filter customer", async () => {
@@ -273,28 +278,28 @@ describe("retrieve all Sales Report Per Customer", () => {
     const salesInvoiceFactory = new SalesInvoiceFactory();
     const data = [
       {
-        userID: userResult.insertedIds[0],        
-        customerID: customerResult.insertedIds[0],
-        salesman: "salesman A",
+        user_id: userResult.insertedIds[0],        
+        customer_id: customerResult.insertedIds[0],
+        customer: "salesman A",
       },
       {
-        userID: userResult.insertedIds[1],        
-        customerID: customerResult.insertedIds[1],
-        salesman: "salesman B",
+        user_id: userResult.insertedIds[1],        
+        customer_id: customerResult.insertedIds[1],
+        customer: "salesman B",
       },
       {
-        userID: userResult.insertedIds[2],        
-        customerID: customerResult.insertedIds[2],
-        salesman: "salesman B",
+        user_id: userResult.insertedIds[2],        
+        customer_id: customerResult.insertedIds[2],
+        customer: "salesman B",
       },
     ];
     salesInvoiceFactory.sequence(data);
     await salesInvoiceFactory.createMany(3);
 
-    const filterSalesman = "salesman B";
+    const filterCustomer = "salesman B";
 
     const response = await request(app)
-      .get(`/v1/salesReportPerCustomers?filter[item]=${encodeURI(filterSalesman)}`)
+      .get(`/v1/salesReportPerCustomers?filter[customer]=${encodeURI(filterCustomer)}`)
       .set("Authorization", `Bearer ${responseLogin.body.accessToken}`);
     // check status code
     expect(response.statusCode).toEqual(200);
@@ -306,10 +311,10 @@ describe("retrieve all Sales Report Per Customer", () => {
     expect(salesInvoiceRecord[1].invoice).toStrictEqual(response.body.salesReportPerCustomers[0].invoice);
     expect(salesInvoiceRecord[1].invoiceDate).toStrictEqual(response.body.salesReportPerCustomers[0].invoiceDate);
     expect(salesInvoiceRecord[1].noFakturPajak).toStrictEqual(response.body.salesReportPerCustomers[0].noFakturPajak);
-    expect(salesInvoiceRecord[1].soldTo).toStrictEqual(response.body.salesReportPerCustomers[0].soldTo);
-    expect(salesInvoiceRecord[1].salesman).toStrictEqual(response.body.salesReportPerCustomers[0].salesman);
-    expect(salesInvoiceRecord[1].kdSalesman).toStrictEqual(response.body.salesReportPerCustomers[0].kdSalesman);
-    expect(salesInvoiceRecord[1].name).toStrictEqual(response.body.salesReportPerCustomers[0].name);
+    expect(customersRecord[1].soldTo).toStrictEqual(response.body.salesReportPerCustomers[0].customer.soldTo);
+    expect(usersRecord[1].salesman).toStrictEqual(response.body.salesReportPerCustomers[0].user.salesman);
+    expect(usersRecord[1].kdSalesman).toStrictEqual(response.body.salesReportPerCustomers[0].user.kdSalesman);
+    expect(customersRecord[1].name).toStrictEqual(response.body.salesReportPerCustomers[0].customer.name);
     expect(salesInvoiceRecord[1].dpp).toStrictEqual(response.body.salesReportPerCustomers[0].dpp);
     expect(salesInvoiceRecord[1].ppn).toStrictEqual(response.body.salesReportPerCustomers[0].ppn);
     expect(salesInvoiceRecord[1].total).toStrictEqual(response.body.salesReportPerCustomers[0].total);
@@ -319,7 +324,11 @@ describe("retrieve all Sales Report Per Customer", () => {
     expect(response.body.pagination.page).toStrictEqual(1);
     expect(response.body.pagination.pageSize).toStrictEqual(10);
     expect(response.body.pagination.pageCount).toStrictEqual(1);
-    expect(response.body.pagination.totalDocument).toStrictEqual(2);
+    expect(response.body.pagination.totalDocument).toStrictEqual(2); 
+    // validate filter
+    response.body.salesReportPerCustomers.forEach((element:any) => {
+      expect(element.customer.name).toStrictEqual(filterCustomer);
+    });
     // check database
   });
   it("1.6 retrieve all Sales Report Per Customer success, with filter date and customer", async () => {
@@ -360,22 +369,22 @@ describe("retrieve all Sales Report Per Customer", () => {
     const salesInvoiceFactory = new SalesInvoiceFactory();
     const data = [
       {
-        userID: userResult.insertedIds[0],        
-        customerID: customerResult.insertedIds[0],
+        user_id: userResult.insertedIds[0],        
+        customer_id: customerResult.insertedIds[0],
         invoiceDate: "2022-01-01",
-        salesman: "salesman B",
+        customer: "salesman B",
       },
       {
-        userID: userResult.insertedIds[1],        
-        customerID: customerResult.insertedIds[1],
+        user_id: userResult.insertedIds[1],        
+        customer_id: customerResult.insertedIds[1],
         invoiceDate: "2021-01-01",
-        salesman: "salesman B",
+        customer: "salesman B",
       },
       {
-        userID: userResult.insertedIds[2],        
-        customerID: customerResult.insertedIds[2],
+        user_id: userResult.insertedIds[2],        
+        customer_id: customerResult.insertedIds[2],
         invoiceDate: "2023-01-01",
-        salesman: "salesman A",
+        customer: "salesman A",
       },
     ];
     salesInvoiceFactory.sequence(data);
@@ -383,11 +392,11 @@ describe("retrieve all Sales Report Per Customer", () => {
 
     const filterDateFrom = "2022-01-01";
     const filterDateTo = "2023-01-01";
-    const filterSalesman = "salesman B";
+    const filterCustomer = "salesman B";
 
     const response = await request(app)
       .get(
-        `/v1/salesReportPerCustomers?filter[dateFrom]=${encodeURI(filterDateFrom)}&filter[dateTo]=${encodeURI(filterDateTo)}&filter[item]=${encodeURI(filterSalesman)}`
+        `/v1/salesReportPerCustomers?filter[dateFrom]=${encodeURI(filterDateFrom)}&filter[dateTo]=${encodeURI(filterDateTo)}&filter[customer]=${encodeURI(filterCustomer)}`
       )
       .set("Authorization", `Bearer ${responseLogin.body.accessToken}`);
     // check status code
@@ -400,10 +409,10 @@ describe("retrieve all Sales Report Per Customer", () => {
     expect(salesInvoiceRecord[0].invoice).toStrictEqual(response.body.salesReportPerCustomers[0].invoice);
     expect(salesInvoiceRecord[0].invoiceDate).toStrictEqual(response.body.salesReportPerCustomers[0].invoiceDate);
     expect(salesInvoiceRecord[0].noFakturPajak).toStrictEqual(response.body.salesReportPerCustomers[0].noFakturPajak);
-    expect(salesInvoiceRecord[0].soldTo).toStrictEqual(response.body.salesReportPerCustomers[0].soldTo);
-    expect(salesInvoiceRecord[0].salesman).toStrictEqual(response.body.salesReportPerCustomers[0].salesman);
-    expect(salesInvoiceRecord[0].kdSalesman).toStrictEqual(response.body.salesReportPerCustomers[0].kdSalesman);
-    expect(salesInvoiceRecord[0].name).toStrictEqual(response.body.salesReportPerCustomers[0].name);
+    expect(customersRecord[0].soldTo).toStrictEqual(response.body.salesReportPerCustomers[0].customer.soldTo);
+    expect(usersRecord[0].salesman).toStrictEqual(response.body.salesReportPerCustomers[0].user.salesman);
+    expect(usersRecord[0].kdSalesman).toStrictEqual(response.body.salesReportPerCustomers[0].user.kdSalesman);
+    expect(customersRecord[0].name).toStrictEqual(response.body.salesReportPerCustomers[0].customer.name);
     expect(salesInvoiceRecord[0].dpp).toStrictEqual(response.body.salesReportPerCustomers[0].dpp);
     expect(salesInvoiceRecord[0].ppn).toStrictEqual(response.body.salesReportPerCustomers[0].ppn);
     expect(salesInvoiceRecord[0].total).toStrictEqual(response.body.salesReportPerCustomers[0].total);
@@ -411,7 +420,13 @@ describe("retrieve all Sales Report Per Customer", () => {
     expect(response.body.pagination.page).toStrictEqual(1);
     expect(response.body.pagination.pageSize).toStrictEqual(10);
     expect(response.body.pagination.pageCount).toStrictEqual(1);
-    expect(response.body.pagination.totalDocument).toStrictEqual(1);
+    expect(response.body.pagination.totalDocument).toStrictEqual(1);    
+    // validate filter
+    response.body.salesReportPerCustomers.forEach((element:any) => {
+      expect(element.customer.name).toStrictEqual(filterCustomer);
+      expect((new Date(element.invoiceDate)).getTime()).toBeGreaterThanOrEqual((new Date(filterDateFrom).getTime()));
+      expect((new Date(element.invoiceDate)).getTime()).toBeLessThanOrEqual((new Date(filterDateTo).getTime()));
+    });
     // check database
   });
   it("1.7 retrieve all Sales Report Per Customer success, with search customer", async () => {
@@ -452,28 +467,28 @@ describe("retrieve all Sales Report Per Customer", () => {
     const salesInvoiceFactory = new SalesInvoiceFactory();
     const data = [
       {
-        userID: userResult.insertedIds[0],        
-        customerID: customerResult.insertedIds[0],
-        salesman: "salesman bukan ABC",
+        user_id: userResult.insertedIds[0],        
+        customer_id: customerResult.insertedIds[0],
+        customer: "salesman bukan ABC",
       },
       {
-        userID: userResult.insertedIds[0],        
-        customerID: customerResult.insertedIds[0],
-        salesman: "salesman ABC",
+        user_id: userResult.insertedIds[0],        
+        customer_id: customerResult.insertedIds[0],
+        customer: "salesman ABC",
       },
       {
-        userID: userResult.insertedIds[0],        
-        customerID: customerResult.insertedIds[0],
-        salesman: "salesman ABC juga",
+        user_id: userResult.insertedIds[0],        
+        customer_id: customerResult.insertedIds[0],
+        customer: "salesman ABC juga",
       },
     ];
     salesInvoiceFactory.sequence(data);
     await salesInvoiceFactory.createMany(3);
 
-    const searchSalesman = "salesman ABC";
+    const searchCustomer = "salesman ABC";
 
     const response = await request(app)
-      .get(`/v1/salesReportPerCustomers?search[item]=${encodeURI(searchSalesman)}`)
+      .get(`/v1/salesReportPerCustomers?search[item]=${encodeURI(searchCustomer)}`)
       .set("Authorization", `Bearer ${responseLogin.body.accessToken}`);
     // check status code
     expect(response.statusCode).toEqual(200);
@@ -485,10 +500,10 @@ describe("retrieve all Sales Report Per Customer", () => {
     expect(salesInvoiceRecord[1].invoice).toStrictEqual(response.body.salesReportPerCustomers[0].invoice);
     expect(salesInvoiceRecord[1].invoiceDate).toStrictEqual(response.body.salesReportPerCustomers[0].invoiceDate);
     expect(salesInvoiceRecord[1].noFakturPajak).toStrictEqual(response.body.salesReportPerCustomers[0].noFakturPajak);
-    expect(salesInvoiceRecord[1].soldTo).toStrictEqual(response.body.salesReportPerCustomers[0].soldTo);
-    expect(salesInvoiceRecord[1].salesman).toStrictEqual(response.body.salesReportPerCustomers[0].salesman);
-    expect(salesInvoiceRecord[1].kdSalesman).toStrictEqual(response.body.salesReportPerCustomers[0].kdSalesman);
-    expect(salesInvoiceRecord[1].name).toStrictEqual(response.body.salesReportPerCustomers[0].name);
+    expect(customersRecord[1].soldTo).toStrictEqual(response.body.salesReportPerCustomers[0].customer.soldTo);
+    expect(usersRecord[1].salesman).toStrictEqual(response.body.salesReportPerCustomers[0].user.salesman);
+    expect(usersRecord[1].kdSalesman).toStrictEqual(response.body.salesReportPerCustomers[0].user.kdSalesman);
+    expect(customersRecord[1].name).toStrictEqual(response.body.salesReportPerCustomers[0].customer.name);
     expect(salesInvoiceRecord[1].dpp).toStrictEqual(response.body.salesReportPerCustomers[0].dpp);
     expect(salesInvoiceRecord[1].ppn).toStrictEqual(response.body.salesReportPerCustomers[0].ppn);
     expect(salesInvoiceRecord[1].total).toStrictEqual(response.body.salesReportPerCustomers[0].total);
@@ -498,7 +513,11 @@ describe("retrieve all Sales Report Per Customer", () => {
     expect(response.body.pagination.page).toStrictEqual(1);
     expect(response.body.pagination.pageSize).toStrictEqual(10);
     expect(response.body.pagination.pageCount).toStrictEqual(1);
-    expect(response.body.pagination.totalDocument).toStrictEqual(2);
+    expect(response.body.pagination.totalDocument).toStrictEqual(2); 
+    // validate filter
+    response.body.salesReportPerCustomers.forEach((element:any) => {
+      expect(element.customer.name).toContain(searchCustomer);
+    });
     // check database
   });
 });

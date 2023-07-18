@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { faker } from "@faker-js/faker";
 import { hash } from "argon2";
 import request from "supertest";
@@ -95,13 +96,13 @@ describe("retrieve all Purchase Report", () => {
     const purchaseInvoiceFactory = new PurchaseInvoiceFactory();
     const data = [
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[0],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[0],
       },
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[1],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[1],
       },
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[2],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[2],
       },
     ];
     purchaseInvoiceFactory.sequence(data);
@@ -121,7 +122,7 @@ describe("retrieve all Purchase Report", () => {
     expect(purchaseInvoiceRecord[0].purchaseInvoice).toStrictEqual(response.body.purchaseReports[0].purchaseInvoice);
     expect(purchaseInvoiceRecord[0].supplier).toStrictEqual(response.body.purchaseReports[0].supplier);
     expect(purchaseInvoiceRecord[0].noFaktur).toStrictEqual(response.body.purchaseReports[0].noFaktur);
-    expect(purchaseReceiveRecord[0].noSuratJalan).toStrictEqual(response.body.purchaseReports[0].noSuratJalan);
+    expect(purchaseReceiveRecord[0].noSuratJalan).toStrictEqual(response.body.purchaseReports[0].purchaseReceive.noSuratJalan);
     expect(purchaseInvoiceRecord[0].noFakturPajak).toStrictEqual(response.body.purchaseReports[0].noFakturPajak);
     expect(purchaseInvoiceRecord[0].dpp).toStrictEqual(response.body.purchaseReports[0].dpp);
     expect(purchaseInvoiceRecord[0].ppn).toStrictEqual(response.body.purchaseReports[0].ppn);
@@ -163,15 +164,15 @@ describe("retrieve all Purchase Report", () => {
     const purchaseInvoiceFactory = new PurchaseInvoiceFactory();
     const data = [
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[0],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[0],
         dateInvoice: "2022-01-01",
       },
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[1],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[1],
         dateInvoice: "2021-01-01",
       },
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[2],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[2],
         dateInvoice: "2023-01-01",
       },
     ];
@@ -197,7 +198,7 @@ describe("retrieve all Purchase Report", () => {
     expect(purchaseInvoiceRecord[0].purchaseInvoice).toStrictEqual(response.body.purchaseReports[0].purchaseInvoice);
     expect(purchaseInvoiceRecord[0].supplier).toStrictEqual(response.body.purchaseReports[0].supplier);
     expect(purchaseInvoiceRecord[0].noFaktur).toStrictEqual(response.body.purchaseReports[0].noFaktur);
-    expect(purchaseReceiveRecord[0].noSuratJalan).toStrictEqual(response.body.purchaseReports[0].noSuratJalan);
+    expect(purchaseReceiveRecord[0].noSuratJalan).toStrictEqual(response.body.purchaseReports[0].purchaseReceive.noSuratJalan);
     expect(purchaseInvoiceRecord[0].noFakturPajak).toStrictEqual(response.body.purchaseReports[0].noFakturPajak);
     expect(purchaseInvoiceRecord[0].dpp).toStrictEqual(response.body.purchaseReports[0].dpp);
     expect(purchaseInvoiceRecord[0].ppn).toStrictEqual(response.body.purchaseReports[0].ppn);
@@ -209,6 +210,12 @@ describe("retrieve all Purchase Report", () => {
     expect(response.body.pagination.pageSize).toStrictEqual(10);
     expect(response.body.pagination.pageCount).toStrictEqual(1);
     expect(response.body.pagination.totalDocument).toStrictEqual(2);
+
+    // validate filter
+    response.body.purchaseReports.forEach((element:any) => {
+      expect((new Date(element.dateInvoice)).getTime()).toBeGreaterThanOrEqual((new Date(filterDateFrom).getTime()));
+      expect((new Date(element.dateInvoice)).getTime()).toBeLessThanOrEqual((new Date(filterDateTo).getTime()));
+    });
     // check database
   });
   it("1.5 retrieve all Purchase Report success, with filter supplier", async () => {
@@ -237,15 +244,15 @@ describe("retrieve all Purchase Report", () => {
     const purchaseInvoiceFactory = new PurchaseInvoiceFactory();
     const data = [
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[0],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[0],
         supplier: "PT bukan ABC",
       },
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[1],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[1],
         supplier: "PT ABC",
       },
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[2],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[2],
         supplier: "PT ABC",
       },
     ];
@@ -268,7 +275,7 @@ describe("retrieve all Purchase Report", () => {
     expect(purchaseInvoiceRecord[1].purchaseInvoice).toStrictEqual(response.body.purchaseReports[0].purchaseInvoice);
     expect(purchaseInvoiceRecord[1].supplier).toStrictEqual(response.body.purchaseReports[0].supplier);
     expect(purchaseInvoiceRecord[1].noFaktur).toStrictEqual(response.body.purchaseReports[0].noFaktur);
-    expect(purchaseReceiveRecord[1].noSuratJalan).toStrictEqual(response.body.purchaseReports[0].noSuratJalan);
+    expect(purchaseReceiveRecord[1].noSuratJalan).toStrictEqual(response.body.purchaseReports[0].purchaseReceive.noSuratJalan);
     expect(purchaseInvoiceRecord[1].noFakturPajak).toStrictEqual(response.body.purchaseReports[0].noFakturPajak);
     expect(purchaseInvoiceRecord[1].dpp).toStrictEqual(response.body.purchaseReports[0].dpp);
     expect(purchaseInvoiceRecord[1].ppn).toStrictEqual(response.body.purchaseReports[0].ppn);
@@ -280,6 +287,10 @@ describe("retrieve all Purchase Report", () => {
     expect(response.body.pagination.pageSize).toStrictEqual(10);
     expect(response.body.pagination.pageCount).toStrictEqual(1);
     expect(response.body.pagination.totalDocument).toStrictEqual(2);
+    // validate filter
+    response.body.purchaseReports.forEach((element:any) => {
+      expect(element.supplier).toStrictEqual(filterSupplier);
+    });
     // check database
   });
   it("1.6 retrieve all Purchase Report success, with filter date and supplier", async () => {
@@ -308,17 +319,17 @@ describe("retrieve all Purchase Report", () => {
     const purchaseInvoiceFactory = new PurchaseInvoiceFactory();
     const data = [
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[0],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[0],
         dateInvoice: "2022-01-01",
         supplier: "PT ABC",
       },
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[1],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[1],
         dateInvoice: "2021-01-01",
         supplier: "PT ABC",
       },
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[2],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[2],
         dateInvoice: "2023-01-01",
         supplier: "PT bukan ABC",
       },
@@ -348,7 +359,7 @@ describe("retrieve all Purchase Report", () => {
     expect(purchaseInvoiceRecord[0].purchaseInvoice).toStrictEqual(response.body.purchaseReports[0].purchaseInvoice);
     expect(purchaseInvoiceRecord[0].supplier).toStrictEqual(response.body.purchaseReports[0].supplier);
     expect(purchaseInvoiceRecord[0].noFaktur).toStrictEqual(response.body.purchaseReports[0].noFaktur);
-    expect(purchaseReceiveRecord[0].noSuratJalan).toStrictEqual(response.body.purchaseReports[0].noSuratJalan);
+    expect(purchaseReceiveRecord[0].noSuratJalan).toStrictEqual(response.body.purchaseReports[0].purchaseReceive.noSuratJalan);
     expect(purchaseInvoiceRecord[0].noFakturPajak).toStrictEqual(response.body.purchaseReports[0].noFakturPajak);
     expect(purchaseInvoiceRecord[0].dpp).toStrictEqual(response.body.purchaseReports[0].dpp);
     expect(purchaseInvoiceRecord[0].ppn).toStrictEqual(response.body.purchaseReports[0].ppn);
@@ -358,6 +369,13 @@ describe("retrieve all Purchase Report", () => {
     expect(response.body.pagination.pageSize).toStrictEqual(10);
     expect(response.body.pagination.pageCount).toStrictEqual(1);
     expect(response.body.pagination.totalDocument).toStrictEqual(1);
+
+    // validate filter
+    response.body.purchaseReports.forEach((element:any) => {
+      expect(element.supplier).toStrictEqual(filterSupplier);
+      expect((new Date(element.dateInvoice)).getTime()).toBeGreaterThanOrEqual((new Date(filterDateFrom).getTime()));
+      expect((new Date(element.dateInvoice)).getTime()).toBeLessThanOrEqual((new Date(filterDateTo).getTime()));
+    });
     // check database
   });
   it("1.7 retrieve all Purchase Report success, with search supplier", async () => {
@@ -386,15 +404,15 @@ describe("retrieve all Purchase Report", () => {
     const purchaseInvoiceFactory = new PurchaseInvoiceFactory();
     const data = [
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[0],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[0],
         supplier: "PT bukan ABC",
       },
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[1],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[1],
         supplier: "PT ABC",
       },
       {
-        purchaseReceiveID: purchaseReceiveResult.insertedIds[2],
+        purchaseReceive_id: purchaseReceiveResult.insertedIds[2],
         supplier: "PT ABC juga",
       },
     ];
@@ -417,7 +435,7 @@ describe("retrieve all Purchase Report", () => {
     expect(purchaseInvoiceRecord[1].purchaseInvoice).toStrictEqual(response.body.purchaseReports[0].purchaseInvoice);
     expect(purchaseInvoiceRecord[1].supplier).toStrictEqual(response.body.purchaseReports[0].supplier);
     expect(purchaseInvoiceRecord[1].noFaktur).toStrictEqual(response.body.purchaseReports[0].noFaktur);
-    expect(purchaseReceiveRecord[1].noSuratJalan).toStrictEqual(response.body.purchaseReports[0].noSuratJalan);
+    expect(purchaseReceiveRecord[1].noSuratJalan).toStrictEqual(response.body.purchaseReports[0].purchaseReceive.noSuratJalan);
     expect(purchaseInvoiceRecord[1].noFakturPajak).toStrictEqual(response.body.purchaseReports[0].noFakturPajak);
     expect(purchaseInvoiceRecord[1].dpp).toStrictEqual(response.body.purchaseReports[0].dpp);
     expect(purchaseInvoiceRecord[1].ppn).toStrictEqual(response.body.purchaseReports[0].ppn);
@@ -428,7 +446,11 @@ describe("retrieve all Purchase Report", () => {
     expect(response.body.pagination.page).toStrictEqual(1);
     expect(response.body.pagination.pageSize).toStrictEqual(10);
     expect(response.body.pagination.pageCount).toStrictEqual(1);
-    expect(response.body.pagination.totalDocument).toStrictEqual(2);
+    expect(response.body.pagination.totalDocument).toStrictEqual(2);    
+    // validate search
+    response.body.purchaseReports.forEach((element:any) => {
+      expect(element.supplier).toContain(searchSupplier);
+    });
     // check database
   });
 });
